@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Welcome Back !"
+        android:id="@+id/textView2"
+        android:gravity="center"
+        android:layout_weight="0.38"
+        android:background="@android:color/holo_red_light"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
+        android:padding="30dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Your data will be restore if any Backup is available"
+        android:id="@+id/textView3"
+        android:gravity="center"
+        android:layout_weight="0.26"
+        android:background="@color/material_grey_850"
+        android:textStyle="italic"
+        android:textColor="@color/abc_secondary_text_material_dark"
+        android:textSize="12dp"
+        android:padding="8dp"/>
+</LinearLayout>

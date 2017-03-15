@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Timeline"
+    android:background="#e6cece">
+
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Set Total Budget"
+        android:id="@+id/textView2"
+        android:gravity="center"
+        android:background="#DC143C"
+        android:textColor="#ffffff"
+        android:padding="10dp"
+        android:typeface="sans"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/button3"
+        android:layout_alignStart="@+id/button3" />
+
+    <EditText
+        android:id="@+id/userInputDialog"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:hint="Enter amount"
+        android:inputType="number"
+        android:gravity="center"
+        android:backgroundTint="#DC143C"
+        android:padding="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/imageView4"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:id="@+id/button3"
+        android:textColor="#fff"
+        android:drawableTop="@drawable/check"
+        android:drawablePadding="-12dp"
+        android:background="#A52A2A"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:imeOptions="actionDone"
+        android:inputType="number"/>
+
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:id="@+id/imageView4"
+        android:layout_marginTop="60dp"
+        android:src="@mipmap/yoyo2"
+        android:layout_below="@+id/textView2"
+        android:layout_centerHorizontal="true" />
+
+
+</RelativeLayout>

@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Timeline">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"/>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="45dp">
+
+
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+
+
+
+
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/card_view_up"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_gravity="center">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imageView"
+                    android:scaleType="fitXY"
+                    android:background="@drawable/aq" />
+            </android.support.v7.widget.CardView>
+
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/card_view_total"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/card_margin">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Total Expenditure"
+                    android:id="@+id/textView_total"
+                    android:padding="10dp"
+                    android:fontFamily="sans-serif-light"
+                    android:visibility="visible"
+                    android:textIsSelectable="false"
+                    android:textAlignment="center" />
+                <ImageButton
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginRight="25dp"
+                    android:id="@+id/imageButton_del_all"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/del"
+                    android:padding="4dp"
+                    android:layout_marginTop="10dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/date"
+                    android:padding="4dp"
+                    android:typeface="monospace"
+                    android:visibility="visible"
+                    android:layout_marginLeft="35dp"
+                    android:layout_marginBottom="54dp"
+                    android:textIsSelectable="true"
+                    android:textAlignment="center"
+                    android:fontFamily="sans-serif-thin"
+                    android:layout_gravity="center"
+                    android:background="@drawable/border_text"
+                    android:textSize="10dp"
+                    android:textColor="@color/design_textinput_error_color_light"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/total"
+                    android:padding="4dp"
+                    android:typeface="monospace"
+                    android:visibility="visible"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="10dp"
+                    android:textIsSelectable="true"
+                    android:textAlignment="center"
+                    android:fontFamily="sans-serif-thin"
+                    android:layout_gravity="right"
+                    android:background="@drawable/border_text"
+                    android:textSize="10dp"
+                    android:textColor="@color/design_textinput_error_color_light"/>
+                <com.github.mikephil.charting.charts.HorizontalBarChart
+                    android:id="@+id/chart_total"
+                    android:layout_width="fill_parent"
+                    android:layout_height="80dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginLeft="6dp"/>
+            </android.support.v7.widget.CardView>
+
+
+
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/card_view"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/card_margin">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Food or Drinks"
+                    android:id="@+id/textView_fooding1"
+                    android:padding="10dp"
+                    android:fontFamily="sans-serif-light"
+                    android:visibility="visible"
+                    android:textIsSelectable="false"
+                    android:textAlignment="center" />
+                <ImageButton
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:id="@+id/imageButton_del_fooding"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/del"
+                    android:padding="4dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="45dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/fooding3"
+                    android:padding="4dp"
+                    android:typeface="monospace"
+                    android:visibility="visible"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="10dp"
+                    android:textIsSelectable="true"
+                    android:textAlignment="center"
+                    android:fontFamily="sans-serif-thin"
+                    android:layout_gravity="right"
+                    android:background="@drawable/border_text"
+                    android:textSize="10dp"
+                    android:textColor="@color/design_textinput_error_color_light"/>
+                <com.github.mikephil.charting.charts.HorizontalBarChart
+                    android:id="@+id/chart1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="70dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginLeft="6dp"/>
+            </android.support.v7.widget.CardView>
+
+
+
+
+
+
+
+
+
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/card_view2"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/card_margin">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Recharge"
+                    android:id="@+id/textView_recharge1"
+                    android:padding="10dp"
+                    android:fontFamily="sans-serif-light"
+                    android:visibility="visible"
+                    android:textIsSelectable="false"
+                    android:textAlignment="center" />
+                <ImageButton
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:id="@+id/imageButton_del_recharge"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/del"
+                    android:padding="4dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="45dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/recharge3"
+                    android:padding="4dp"
+                    android:typeface="monospace"
+                    android:visibility="visible"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="10dp"
+                    android:textIsSelectable="true"
+                    android:textAlignment="center"
+                    android:fontFamily="sans-serif-thin"
+                    android:layout_gravity="right"
+                    android:background="@drawable/border_text"
+                    android:textSize="10dp"
+                    android:textColor="@color/design_textinput_error_color_light" />
+                <com.github.mikephil.charting.charts.HorizontalBarChart
+                    android:id="@+id/chart_recharge"
+                    android:layout_width="fill_parent"
+                    android:layout_height="70dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginLeft="6dp"/>
+            </android.support.v7.widget.CardView>
+
+
+
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/card_view3"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/card_margin">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Shopping"
+                    android:id="@+id/textView_shoping1"
+                    android:padding="10dp"
+                    android:fontFamily="sans-serif-light"
+                    android:visibility="visible"
+                    android:textIsSelectable="false"
+                    android:textAlignment="center" />
+                <ImageButton
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:id="@+id/imageButton_del_shoping"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/del"
+                    android:padding="4dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="45dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/shoping3"
+                    android:padding="4dp"
+                    android:typeface="monospace"
+                    android:visibility="visible"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="10dp"
+                    android:textIsSelectable="true"
+                    android:textAlignment="center"
+                    android:fontFamily="sans-serif-thin"
+                    android:layout_gravity="right"
+                    android:background="@drawable/border_text"
+                    android:textSize="10dp"
+                    android:textColor="@color/design_textinput_error_color_light" />
+
+                <com.github.mikephil.charting.charts.HorizontalBarChart
+                    android:id="@+id/chart_shoping"
+                    android:layout_width="fill_parent"
+                    android:layout_height="70dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginLeft="6dp"/>
+            </android.support.v7.widget.CardView>
+
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/card_view4"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/card_margin">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Travel or Transport"
+                    android:id="@+id/textView_transport1"
+                    android:padding="10dp"
+                    android:fontFamily="sans-serif-light"
+                    android:visibility="visible"
+                    android:textIsSelectable="false"
+                    android:textAlignment="center" />
+                <ImageButton
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:id="@+id/imageButton_del_transport"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/del"
+                    android:padding="4dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="45dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/transport3"
+                    android:padding="4dp"
+                    android:typeface="monospace"
+                    android:visibility="visible"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="10dp"
+                    android:textIsSelectable="true"
+                    android:textAlignment="center"
+                    android:fontFamily="sans-serif-thin"
+                    android:layout_gravity="right"
+                    android:background="@drawable/border_text"
+                    android:textSize="10dp"
+                    android:textColor="@color/design_textinput_error_color_light" />
+                <com.github.mikephil.charting.charts.HorizontalBarChart
+                    android:id="@+id/chart_transport"
+                    android:layout_width="fill_parent"
+                    android:layout_height="70dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginLeft="6dp"/>
+            </android.support.v7.widget.CardView>
+
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/card_view6"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/card_margin">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Others"
+                    android:id="@+id/textView_other1"
+                    android:padding="10dp"
+                    android:fontFamily="sans-serif-light"
+                    android:visibility="visible"
+                    android:textIsSelectable="false"
+                    android:textAlignment="center" />
+                <ImageButton
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:id="@+id/imageButton_del_other"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/del"
+                    android:padding="4dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="45dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/other3"
+                    android:padding="4dp"
+                    android:typeface="monospace"
+                    android:visibility="visible"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="10dp"
+                    android:textIsSelectable="true"
+                    android:textAlignment="center"
+                    android:fontFamily="sans-serif-thin"
+                    android:layout_gravity="right"
+                    android:background="@drawable/border_text"
+                    android:textSize="10dp"
+                    android:textColor="@color/design_textinput_error_color_light" />
+                <com.github.mikephil.charting.charts.HorizontalBarChart
+                    android:id="@+id/chart_other"
+                    android:layout_width="fill_parent"
+                    android:layout_height="70dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginLeft="6dp" />
+            </android.support.v7.widget.CardView>
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+</RelativeLayout>

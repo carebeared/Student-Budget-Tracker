@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/custom_dialog_layout_design_user_input"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <EditText
+        android:id="@+id/userInputDialog"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:hint="Enter amount"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="5dp"
+        android:inputType="number"
+        android:paddingLeft="2dp"
+        android:gravity="center"
+        android:backgroundTint="@color/DarkKhaki"/>
+    <EditText
+        android:id="@+id/userInputDialog_1"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:hint="Name here"
+        android:inputType="text"
+        android:layout_marginBottom="30dp"
+        android:paddingLeft="2dp"
+        android:gravity="center"
+        android:backgroundTint="@color/DarkKhaki"
+        />
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:id="@+id/button_money"
+        android:textColor="#fff"
+        android:drawableTop="@drawable/check"
+        android:drawablePadding="-12dp"
+        android:layout_marginTop="-5dp"
+        android:background="@color/DarkKhaki"
+        />
+
+</LinearLayout>

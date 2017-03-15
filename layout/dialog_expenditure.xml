@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/custom_dialog_layout_design_user_input"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Expenditure Amount"
+        android:id="@+id/textView2"
+        android:gravity="left"
+        android:background="@android:color/holo_green_dark"
+        android:textColor="#ffffff"
+        android:padding="10dp"
+        android:typeface="sans" />
+
+
+    <EditText
+        android:id="@+id/userInputDialog"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:hint="Enter amount"
+        android:layout_margin="20dp"
+        android:paddingLeft="2dp"
+        android:inputType="number"
+        android:gravity="center"
+        android:backgroundTint="@android:color/holo_green_dark"/>
+
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:id="@+id/button3"
+        android:textColor="#fff"
+        android:drawableTop="@drawable/check"
+        android:drawablePadding="-12dp"
+        android:layout_marginTop="-5dp"
+        android:background="#FF8C00"
+       />
+
+
+</LinearLayout>
