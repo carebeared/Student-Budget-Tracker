@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.magic.akash.magicbox">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
+
+    <application
+        android:icon="@mipmap/yoyo2"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".Splashscreen"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/app_name"
+            android:noHistory="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateAlwaysHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".Budget"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Timeline"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:noHistory="true" />
+        <activity
+            android:name=".Display"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name=".Display_money_exchange"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name=".welcomeScreen"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="stateAlwaysVisible" />
+        <activity
+            android:name=".Feedback"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/title_activity_eedback"
+            android:screenOrientation="portrait"
+            android:theme="@style/FullscreenTheme" />
+
+        <receiver android:name=".Notification" />
+        <receiver android:name=".notification2" />
+
+        <activity android:name=".ChooseCountry" />
+        <activity android:name=".star_fooding" />
+        <activity android:name=".star_recharge" />
+        <activity android:name=".star_shopping" />
+        <activity android:name=".star_other" />
+        <activity android:name=".star_transport" />
+
+
+        <receiver android:name=".Notification_online">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+
+</manifest>
