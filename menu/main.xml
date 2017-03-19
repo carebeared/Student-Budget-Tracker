@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <item
+        android:id="@+id/empty"
+        android:orderInCategory="101"
+        android:title="Set individual Budget">
+    <menu>
+    <item
+        android:id="@+id/action_fooding"
+        android:orderInCategory="100"
+        android:title="Fooding"
+        android:icon="@drawable/food111"
+        app:showAsAction="always"
+        />
+    <item
+        android:id="@+id/action_recharge"
+        android:orderInCategory="100"
+        android:title="Recharge"
+        android:icon="@drawable/mobile111"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_shoping"
+        android:orderInCategory="1"
+        android:title="Shopping"
+        android:icon="@drawable/cart11"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_transport"
+        android:orderInCategory="100"
+        android:title="Transport"
+        android:icon="@drawable/ground111"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_other"
+        android:orderInCategory="100"
+        android:title="Others"
+        android:icon="@drawable/plus111"
+        app:showAsAction="always" />
+        </menu>
+</item>
+</menu>

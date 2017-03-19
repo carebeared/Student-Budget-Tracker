@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_timeline"
+            android:icon="@drawable/time"
+            android:title="TimeLine"
+            />
+        <item
+            android:id="@+id/nav_set_budget"
+            android:icon="@drawable/add"
+            android:title="Reset Total Budget"
+            />
+        <item
+            android:id="@+id/nav_update"
+            android:icon="@drawable/update"
+            android:title="Update Budget" />
+        <item
+            android:id="@+id/nav_view_budget"
+            android:icon="@drawable/view"
+            android:title="View Expenses" />
+
+        <item
+            android:id="@+id/nav_saving"
+            android:icon="@drawable/exc"
+            android:title="Saving A/C" />
+        <item
+            android:id="@+id/nav_backup"
+            android:icon="@drawable/res"
+            android:title="Backup/Restore" />
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/share"
+                android:title="Share" />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/feedback"
+                android:title="Feedback" />
+
+            <item
+                android:id="@+id/nav_help"
+                android:icon="@drawable/info"
+                android:title="Help" />
+        </menu>
+    </item>
+
+</menu>

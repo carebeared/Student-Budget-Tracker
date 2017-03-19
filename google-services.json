@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "882139836396",
+    "firebase_url": "https://magicbox-2fcb1.firebaseio.com",
+    "project_id": "magicbox-2fcb1",
+    "storage_bucket": "magicbox-2fcb1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:882139836396:android:d484a96efb1bb3f5",
+        "android_client_info": {
+          "package_name": "com.magic.akash.magicbox"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "882139836396-kpg356p75fhtrm2peumrf9q24fk5tsp2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANuRsxkED-BpHTCmt8def4pY6BwTLII1I"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
