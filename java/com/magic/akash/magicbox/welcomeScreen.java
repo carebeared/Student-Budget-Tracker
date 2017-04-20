@@ -94,7 +94,6 @@ public class welcomeScreen extends AppCompatActivity {
                         overridePendingTransition(R.anim.enter, R.anim.exit);
                         // Toast.makeText(welcomeScreen.this, "Welcome to magicBank", Toast.LENGTH_SHORT).show();
 
-
                         NotificationCompat.Builder builder = (NotificationCompat.Builder) new NotificationCompat.Builder(welcomeScreen.this).setSmallIcon(R.drawable.qw).setContentTitle("Total Budget is Set !").setContentText("Rs " + String.valueOf(sharedPreferences.getInt("k_total", 0)) + " set until next Reset Budget");
                         Intent notificationIntent = new Intent(welcomeScreen.this, MainActivity.class);
                         PendingIntent contentIntent = PendingIntent.getActivity(welcomeScreen.this, 100, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);

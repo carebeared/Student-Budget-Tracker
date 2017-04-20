@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -56,7 +57,7 @@ public class Tab_lending  extends Fragment{
 
         listView=(ListView) getActivity().findViewById(R.id.list2);
         dataModels= new ArrayList<>();
-
+        final String[]symbol = {"","₹","₱","£","kr","$","$","Дин.","RM","Rf."};
         final String[] data = new String[1];
         final String[] data1 = new String[1];
         final String[] data2 = new String[1];
@@ -71,7 +72,7 @@ public class Tab_lending  extends Fragment{
 
             Locale defaultLocale = Locale.getDefault();
             Currency currency = Currency.getInstance(defaultLocale);
-            dataModels.add(new DataModel( (sharedPreferences.getInt("flag_value", 1)==1 ? rupee : currency.getSymbol() )+""+data[0], data1[0],data3[0]));
+            dataModels.add(new DataModel( symbol[sharedPreferences.getInt("flag_value", 0)]+""+data[0], data1[0],data3[0]));
         }
 
 
@@ -190,24 +191,30 @@ public class Tab_lending  extends Fragment{
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        EditText ed= (EditText) mView.findViewById(R.id.userInputDialog);
-                        ContentValues cv = new ContentValues();
-                        cv.put("amount",ed.getText().toString()); //These Fields should be your String values of actual column names
-                        sqLiteDatabase.update("student_lending_pp", cv, "id="+id, null);
-                        dataModels.clear();
-                        Cursor cursor=sqLiteDatabase.rawQuery("SELECT * FROM student_lending_pp",null);
-                        while(cursor.moveToNext()) {
-                            data[0] = cursor.getString(1);
-                            data1[0] = cursor.getString(2);
-                            data2[0] = cursor.getString(0);
-                            data3[0] = cursor.getString(3);
-                            String rupee = getResources().getString(R.string.Rs);
-                            dataModels.add(new DataModel(rupee+""+data[0], data1[0],data3[0]));
+                        EditText ed = (EditText) mView.findViewById(R.id.userInputDialog);
+                        if (ed.getText().length() <= 8) {
+                            ContentValues cv = new ContentValues();
+                            cv.put("amount", ed.getText().toString()); //These Fields should be your String values of actual column names
+                            sqLiteDatabase.update("student_lending_pp", cv, "id=" + id, null);
+                            dataModels.clear();
+                            Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM student_lending_pp", null);
+                            while (cursor.moveToNext()) {
+                                data[0] = cursor.getString(1);
+                                data1[0] = cursor.getString(2);
+                                data2[0] = cursor.getString(0);
+                                data3[0] = cursor.getString(3);
+                                String rupee = getResources().getString(R.string.Rs);
+                                dataModels.add(new DataModel(rupee + "" + data[0], data1[0], data3[0]));
+                            }
+                            listView.setAdapter(adapter);
+                            alertDialogAndroid.dismiss();
                         }
-                        listView.setAdapter(adapter);
-                        alertDialogAndroid.dismiss();
+                        else{
+                            Toast.makeText(getContext(), "Enter valid amount", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
+                alertDialogAndroid.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                 alertDialogAndroid.show();
                 alertDialogAndroid.setCanceledOnTouchOutside(true);
             }

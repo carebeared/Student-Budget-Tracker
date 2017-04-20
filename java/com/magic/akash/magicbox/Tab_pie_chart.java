@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -249,7 +250,7 @@ public class Tab_pie_chart extends Fragment {
                         alertDialogAndroid.show();
                     }
                 });
-
+                alertDialogAndroid.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                 alertDialogAndroid.dismiss();
                 alertDialogAndroid.show();
                 alertDialogAndroid.setCanceledOnTouchOutside(true);
@@ -295,7 +296,7 @@ public class Tab_pie_chart extends Fragment {
 
     public void setDataForPieChart() {
 
-
+        final String[]symbol = {"","₹","₱","£","kr","$","$","Дин.","RM","Rf."};
         sqLiteDatabase = getActivity().openOrCreateDatabase("OLBE_DEMO", android.content.Context.MODE_PRIVATE, null);//create database
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS student_demo_p_view(id INTEGER PRIMARY KEY AUTOINCREMENT,amount VARCHAR,dateyo VARCHAR,timeyo VARCHAR)");
         Cursor cursor_fooding = sqLiteDatabase.rawQuery("SELECT SUM(amount) FROM student_demo_p_view", null);
@@ -323,7 +324,7 @@ public class Tab_pie_chart extends Fragment {
 
         Locale defaultLocale = Locale.getDefault();
         Currency currency = Currency.getInstance(defaultLocale);
-        tv.setText("Your Total Expenditute : " + (sharedPreferences.getInt("flag_value", 1)==1 ? rupee : currency.getSymbol() ) + String.valueOf(yopo));
+        tv.setText("Your Total Expenditute : " + symbol[sharedPreferences.getInt("flag_value", 0)] + String.valueOf(yopo));
         TextView tv_1 = (TextView) getActivity().findViewById(R.id.chart_content_1);
         tv_1.setText("Till date :"+date);
 

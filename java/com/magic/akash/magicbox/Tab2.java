@@ -72,7 +72,12 @@ public class Tab2  extends Fragment{
         data.setValueTextColor(Color.parseColor("#66000000"));
         data.setValueTextSize(7f);
         data.setValueTextColor(Color.parseColor("#DC143C"));
-        dataset.setColors(ColorTemplate.COLORFUL_COLORS); //
+        dataset.setColors(ColorTemplate.JOYFUL_COLORS); //
+        if (entries.size() <=8){ // barEntries is my Entry Array
+            int factor = 10; // increase this to decrease the bar width. Decrease to increase he bar width
+            int percent = (factor - entries.size())*10;
+            dataset.setBarSpacePercent(percent);
+        }
         //dataset.setDrawCubic(true);
         //dataset.setDrawFilled(false);
         lineChart.setPinchZoom(false);
@@ -134,7 +139,12 @@ public class Tab2  extends Fragment{
         data1.setValueTextColor(Color.parseColor("#66000000"));
         data1.setValueTextSize(7f);
         data1.setValueTextColor(Color.parseColor("#DC143C"));
-        dataset1.setColors(ColorTemplate.COLORFUL_COLORS); //
+        dataset1.setColors(ColorTemplate.JOYFUL_COLORS); //
+        if (entries1.size() <=8){ // barEntries is my Entry Array
+            int factor = 10; // increase this to decrease the bar width. Decrease to increase he bar width
+            int percent = (factor - entries1.size())*10;
+            dataset1.setBarSpacePercent(percent);
+        }
         //dataset.setDrawCubic(true);
         //dataset.setDrawFilled(false);
         lineChart1.setPinchZoom(false);
@@ -158,7 +168,7 @@ public class Tab2  extends Fragment{
         //lineChart.getData().setHighlightEnabled(false);
         // TODO Auto-generated method stub
 
-
+        final String[]symbol = {"","₹","₱","£","kr","$","$","Дин.","RM","Rf."};
 
 
 
@@ -173,7 +183,7 @@ public class Tab2  extends Fragment{
             TextView t = (TextView) getActivity().findViewById(R.id.textView7);
             Locale defaultLocale = Locale.getDefault();
             Currency currency = Currency.getInstance(defaultLocale);
-            t.setText("Total Expenditure :  "+(sharedPreferences.getInt("flag_value", 1)==1 ? rupee : currency.getSymbol() )+""+String.valueOf(amount_yo));
+            t.setText("Total Expenditure :  "+symbol[sharedPreferences.getInt("flag_value", 0)]+""+String.valueOf(amount_yo));
         }
 
         // TODO Auto-generated method stub

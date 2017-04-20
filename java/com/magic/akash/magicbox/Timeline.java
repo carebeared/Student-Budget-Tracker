@@ -52,12 +52,13 @@ public class Timeline extends AppCompatActivity {
     final Context c = this;
     ImageButton img,img2,img3,img4,img5,img_all;
     ImageView iv;
+    private static final String[]symbol = {"","₹","₱","£","kr","$","$","Дин.","RM","Rf."};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
 
-
+        String rupee = getResources().getString(R.string.Rs);
 
  //imagebutton
         iv= (ImageView) findViewById(R.id.imageView2);
@@ -90,6 +91,7 @@ public class Timeline extends AppCompatActivity {
 
         sqLiteDatabase = openOrCreateDatabase("OLBE_DEMO", MODE_PRIVATE, null);//create database
         sharedPreferences = getSharedPreferences("DATABASE", MODE_PRIVATE);
+        int flag = sharedPreferences.getInt("flag_value", 0);
 
 //DEFINING ATRIBUTE
         chart = (BarChart) findViewById(R.id.chart1);
@@ -119,7 +121,10 @@ public class Timeline extends AppCompatActivity {
         //chart.setNoDataText("hey there");
         //chart.setDrawBorders(false);
         chart.setDescription("");
-        chart.setDrawValueAboveBar(false);
+
+        if(amount_fooding>=0 && amount_fooding<=100){chart.setDrawValueAboveBar(true);}
+        else{chart.setDrawValueAboveBar(false);}
+
         chart.getAxisLeft().setDrawLabels(false);
         //chart.getAxisRight().setDrawLabels(false);
         //chart.getXAxis().setDrawLabels(false);
@@ -136,9 +141,7 @@ public class Timeline extends AppCompatActivity {
         Currency currency = Currency.getInstance(defaultLocale);
 //SET TEXT
         tv_fooding = (TextView) findViewById(R.id.fooding3);
-        String rupee = getResources().getString(R.string.Rs);
-        tv_fooding.setText("spend : " +(sharedPreferences.getInt("flag_value", 1)==1 ? rupee : currency.getSymbol() )+ String.valueOf(amount_fooding));
-
+        tv_fooding.setText("spend : "+symbol[sharedPreferences.getInt("flag_value", 0)]+""+ String.valueOf(amount_fooding));
         //Bardataset.setColor(Color.rgb(153, 193, 12));
 
 
@@ -225,7 +228,12 @@ public class Timeline extends AppCompatActivity {
         //chart.setNoDataText("hey there");
         // chart.setDrawBorders(false);
         chart_recharge.setDescription("");
-        chart_recharge.setDrawValueAboveBar(false);
+
+
+        if(amount_recharge>=0 && amount_recharge<=100){chart_recharge.setDrawValueAboveBar(true);}
+        else{chart_recharge.setDrawValueAboveBar(false);}
+
+
         chart_recharge.getAxisLeft().setDrawLabels(false);
         //chart.getAxisRight().setDrawLabels(false);
         //chart.getXAxis().setDrawLabels(false);
@@ -240,7 +248,7 @@ public class Timeline extends AppCompatActivity {
         chart_recharge.getAxisRight().setTextSize(8f);
         //SET TEXT
         tv_fooding = (TextView) findViewById(R.id.recharge3);
-        tv_fooding.setText("spend : " + (sharedPreferences.getInt("flag_value", 1)==1 ? rupee : currency.getSymbol() ) + String.valueOf(amount_recharge));
+        tv_fooding.setText("spend : " + symbol[sharedPreferences.getInt("flag_value", 0)]+ String.valueOf(amount_recharge));
 
 
         img2 = (ImageButton) findViewById(R.id.imageButton_del_recharge);
@@ -324,7 +332,10 @@ public class Timeline extends AppCompatActivity {
         //chart.setNoDataText("hey there");
         // chart.setDrawBorders(false);
         chart_shoping.setDescription("");
-        chart_shoping.setDrawValueAboveBar(false);
+
+        if(amount_shoping>=0 && amount_shoping<=100){chart_shoping.setDrawValueAboveBar(true);}
+        else{chart_shoping.setDrawValueAboveBar(false);}
+
         chart_shoping.getAxisLeft().setDrawLabels(false);
         //chart.getAxisRight().setDrawLabels(false);
         //chart.getXAxis().setDrawLabels(false);
@@ -338,8 +349,9 @@ public class Timeline extends AppCompatActivity {
         chart_shoping.setBorderColor(Color.parseColor("#50D3D3D3"));
         chart_shoping.getAxisRight().setTextSize(8f);
         //SET TEXT
+
         tv_fooding = (TextView) findViewById(R.id.shoping3);
-        tv_fooding.setText("spend : " + (sharedPreferences.getInt("flag_value", 1)==1 ? rupee : currency.getSymbol() ) + String.valueOf(amount_shoping));
+        tv_fooding.setText("spend : " + symbol[sharedPreferences.getInt("flag_value", 0)] + String.valueOf(amount_shoping));
 
 
         img3 = (ImageButton) findViewById(R.id.imageButton_del_shoping);
@@ -421,7 +433,10 @@ public class Timeline extends AppCompatActivity {
         //chart.setNoDataText("hey there");
         // chart.setDrawBorders(false);
         chart_transport.setDescription("");
-        chart_transport.setDrawValueAboveBar(false);
+
+        if(amount_transport>=0 && amount_transport<=100){chart_transport.setDrawValueAboveBar(true);}
+        else{chart_transport.setDrawValueAboveBar(false);}
+
         chart_transport.getAxisLeft().setDrawLabels(false);
         //chart.getAxisRight().setDrawLabels(false);
         //chart.getXAxis().setDrawLabels(false);
@@ -436,7 +451,7 @@ public class Timeline extends AppCompatActivity {
         chart_transport.getAxisRight().setTextSize(8f);
         //SET TEXT
         tv_fooding = (TextView) findViewById(R.id.transport3);
-        tv_fooding.setText("spend : " + (sharedPreferences.getInt("flag_value", 1)==1 ? rupee : currency.getSymbol() )  + String.valueOf(amount_transport));
+        tv_fooding.setText("spend : " + symbol[sharedPreferences.getInt("flag_value", 0)]  + String.valueOf(amount_transport));
 
 
         img4 = (ImageButton) findViewById(R.id.imageButton_del_transport);
@@ -521,7 +536,11 @@ public class Timeline extends AppCompatActivity {
         //chart.setNoDataText("hey there");
         // chart.setDrawBorders(false);
         chart_other.setDescription("");
-        chart_other.setDrawValueAboveBar(false);
+
+        if(amount_other>=0 && amount_other<=100){chart_other.setDrawValueAboveBar(true);}
+        else{chart_other.setDrawValueAboveBar(false);}
+
+
         chart_other.getAxisLeft().setDrawLabels(false);
         //chart.getAxisRight().setDrawLabels(false);
         //chart.getXAxis().setDrawLabels(false);
@@ -536,7 +555,7 @@ public class Timeline extends AppCompatActivity {
         chart_other.getAxisRight().setTextSize(8f);
         //SET TEXT
         tv_fooding = (TextView) findViewById(R.id.other3);
-        tv_fooding.setText("spend : " + (sharedPreferences.getInt("flag_value", 1)==1 ? rupee : currency.getSymbol() )  + String.valueOf(amount_other));
+        tv_fooding.setText("spend : " + symbol[sharedPreferences.getInt("flag_value", 0)]  + String.valueOf(amount_other));
 
 
         img5 = (ImageButton) findViewById(R.id.imageButton_del_other);
@@ -618,6 +637,8 @@ public class Timeline extends AppCompatActivity {
         // chart.setDrawBorders(false);
         chart_total.setDescription("");
         chart_total.setDrawValueAboveBar(false);
+
+
         chart_total.getAxisLeft().setDrawLabels(false);
         //chart.getAxisRight().setDrawLabels(false);
         //chart.getXAxis().setDrawLabels(false);
@@ -666,7 +687,7 @@ public class Timeline extends AppCompatActivity {
 
 //SET TEXT
         tv_total = (TextView) findViewById(R.id.total);
-        tv_total.setText("spend : " + (sharedPreferences.getInt("flag_value", 1)==1 ? rupee : currency.getSymbol() )  + String.valueOf(amount_total));
+        tv_total.setText("spend : " + symbol[sharedPreferences.getInt("flag_value", 0)]  + String.valueOf(amount_total));
 
 
 
@@ -706,7 +727,7 @@ public class Timeline extends AppCompatActivity {
             //Convert long to String
             String dayDifference = Long.toString(differenceDates);
             TextView tv_date = (TextView) findViewById(R.id.date);
-            tv_date.setText(dayDifference + "  days over");
+            tv_date.setText(dayDifference + "  days");
 
 
         } catch (Exception exception) {

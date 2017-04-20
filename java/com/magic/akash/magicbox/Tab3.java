@@ -71,10 +71,15 @@ public class Tab3  extends Fragment{
         data.setValueTextColor(Color.parseColor("#66000000"));
         data.setValueTextSize(7f);
         data.setValueTextColor(Color.parseColor("#DC143C"));
-        dataset.setColors(ColorTemplate.COLORFUL_COLORS); //
+        dataset.setColors(ColorTemplate.JOYFUL_COLORS); //
         //dataset.setDrawCubic(true);
         //dataset.setDrawFilled(false);
         lineChart.setPinchZoom(false);
+        if (entries.size() <=8){ // barEntries is my Entry Array
+            int factor = 10; // increase this to decrease the bar width. Decrease to increase he bar width
+            int percent = (factor - entries.size())*10;
+            dataset.setBarSpacePercent(percent);
+        }
         //dataset.setLineWidth(0f);
         lineChart.setScaleMinima((float) data.getXValCount() / 10f, 1f);
         lineChart.setData(data);
@@ -96,7 +101,7 @@ public class Tab3  extends Fragment{
         // TODO Auto-generated method stub
         super.onActivityCreated(savedInstanceState);
 
-
+        final String[]symbol = {"","₹","₱","£","kr","$","$","Дин.","RM","Rf."};
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("DATABASE", getActivity().MODE_PRIVATE);
         String rupee = getResources().getString(R.string.Rs);
         Cursor cursor_yo = sqLiteDatabase.rawQuery("SELECT SUM(amount) FROM student_transport_p_view", null);
@@ -106,7 +111,7 @@ public class Tab3  extends Fragment{
             TextView t = (TextView) getActivity().findViewById(R.id.textView8);
             Locale defaultLocale = Locale.getDefault();
             Currency currency = Currency.getInstance(defaultLocale);
-            t.setText("Total Expenditure :  "+(sharedPreferences.getInt("flag_value", 1)==1 ? rupee : currency.getSymbol() )+""+String.valueOf(amount_yo));
+            t.setText("Total Expenditure :  "+symbol[sharedPreferences.getInt("flag_value", 0)]+""+String.valueOf(amount_yo));
         }
 
 
@@ -136,7 +141,7 @@ public class Tab3  extends Fragment{
         data1.setValueTextColor(Color.parseColor("#66000000"));
         data1.setValueTextSize(7f);
         data1.setValueTextColor(Color.parseColor("#DC143C"));
-        dataset1.setColors(ColorTemplate.COLORFUL_COLORS); //
+        dataset1.setColors(ColorTemplate.JOYFUL_COLORS); //
         //dataset.setDrawCubic(true);
         //dataset.setDrawFilled(false);
         lineChart1.setPinchZoom(false);
@@ -147,6 +152,11 @@ public class Tab3  extends Fragment{
         lineChart1.setDescription("");
         //lineChart.getAxisLeft().setDrawLabels(false);
         //lineChart.getAxisRight().setDrawLabels(false);
+        if (entries1.size() <=8){ // barEntries is my Entry Array
+            int factor = 10; // increase this to decrease the bar width. Decrease to increase he bar width
+            int percent = (factor - entries1.size())*10;
+            dataset1.setBarSpacePercent(percent);
+        }
         lineChart1.setDrawBorders(true);
         lineChart1.setBorderColor(Color.parseColor("#5F9EA0"));
         lineChart1.getLegend().setEnabled(false);

@@ -2,10 +2,9 @@ package com.magic.akash.magicbox;
 
 import android.Manifest;
 import android.app.AlarmManager;
-import android.app.Dialog;
+import android.app.DatePickerDialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.backup.BackupManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,22 +13,18 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
-import android.graphics.Rect;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.ColorDrawable;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.provider.CalendarContract;
+import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.NotificationCompat;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -43,50 +38,27 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.NumberPicker;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.xml.sax.SAXException;
-
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Currency;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Handler;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 public class MainActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -96,7 +68,9 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     SQLiteDatabase sqLiteDatabase;
     SharedPreferences sharedPreferences;
     Integer amount_fooding,amount_recharge,amount_shoping,amount_transport,amount_total,amount_other,amount_saving,amount_backup,amount_backup_saving;
-    String amount_backup_date;
+    String amount_backup_date,contact_name;
+    public final int PICK_CONTACT = 2015;
+    EditText user_Input_1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,7 +92,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         Calendar calendar1 = Calendar.getInstance();
         calendar1.set(Calendar.HOUR_OF_DAY, 23);
         calendar1.set(Calendar.MINUTE, 59);
-        calendar1.set(Calendar.SECOND, 59);
+        calendar1.set(Calendar.SECOND, 58);
         Intent intent1 = new Intent(getApplicationContext(), notification2.class);
         PendingIntent pendingIntent1 = PendingIntent.getBroadcast(MainActivity.this, 1,intent1, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager am1 = (AlarmManager) MainActivity.this.getSystemService(MainActivity.this.ALARM_SERVICE);
@@ -191,9 +165,30 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         navigationView.setNavigationItemSelectedListener(this);
 
 
+
+
+
+
+
+
+
+
 //database open
         sqLiteDatabase = openOrCreateDatabase("OLBE_DEMO", MODE_PRIVATE, null);//create database
         sharedPreferences=getSharedPreferences("DATABASE",MODE_PRIVATE);
+
+
+
+
+
+
+
+
+
+
+
+
+
 //FOODING
         imgButton = (ImageButton) findViewById(R.id.imageButton);
         imgButton.setOnClickListener(new View.OnClickListener() {
@@ -208,7 +203,22 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                 user_Input.requestFocus();
                 final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-                Button btn= (Button) mView.findViewById(R.id.button3);
+
+                final EditText user_Input_new = (EditText) mView.findViewById(R.id.userInputDialog1);
+                final Button btn_new3 = (Button) mView.findViewById(R.id.button6);
+                final Button btn_new2 = (Button) mView.findViewById(R.id.button4);
+                final Button btn_new1= (Button) mView.findViewById(R.id.button5);
+
+
+                btn_new1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        new DatePickerDialog(MainActivity.this, date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                    }
+                });
+
+
+                final Button btn= (Button) mView.findViewById(R.id.button3);
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -217,7 +227,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                             if (user_Input.getText().toString().length()<=8) {
                             SimpleDateFormat dateF = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                             SimpleDateFormat timeF = new SimpleDateFormat("HH:mm", Locale.getDefault());
-                            String date = dateF.format(Calendar.getInstance().getTime());
+                            String date = dateF.format(myCalendar.getTime());
                             String time = timeF.format(Calendar.getInstance().getTime());
 //making table in database for view
                             sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS student_demo_p_view(id INTEGER PRIMARY KEY AUTOINCREMENT,amount VARCHAR,dateyo VARCHAR,timeyo VARCHAR)");//create table
@@ -226,9 +236,9 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
                             sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS student_demo_p(amount VARCHAR,dateyo VARCHAR,timeyo VARCHAR)");//create table
                             sqLiteDatabase.execSQL("INSERT INTO student_demo_p(amount,dateyo,timeyo) VALUES('" + s + "','" + date + "','" + time + "')");//insert data fetch through edit text
-                            Toast.makeText(MainActivity.this, "  Rs" + s + " saved on " + date + "    " + time + "", Toast.LENGTH_LONG).show();
+                            Toast.makeText(MainActivity.this, "  Rs" + s + " saved" +", Long click to See", Toast.LENGTH_LONG).show();
                             alertDialogAndroid.dismiss();
-                            imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.RESULT_UNCHANGED_HIDDEN);
                         }
                             else{
                                 Toast.makeText(MainActivity.this, "Please Enter valid Amount !", Toast.LENGTH_LONG).show();
@@ -239,10 +249,137 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                         }
                     }
                 });
+
+
+                final TextView tv= (TextView) mView.findViewById(R.id.textView);
+                final TextView tv_new= (TextView) mView.findViewById(R.id.textView_new);
+
+                btn_new2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(!user_Input.getText().toString().isEmpty()) {if (user_Input.getText().toString().length()<=8) {
+                            //Toast.makeText(MainActivity.this, "vbhqqq"+user_Input.getText().toString(), Toast.LENGTH_SHORT).show();
+                            user_Input.setVisibility(View.GONE);
+                            user_Input_new.setVisibility(View.VISIBLE);
+
+                            tv.setVisibility(View.GONE);
+                            tv_new.setVisibility(View.VISIBLE);
+
+                            btn_new3.setVisibility(View.VISIBLE);
+                            btn_new2.setVisibility(View.GONE);
+                            btn_new1.setVisibility(View.GONE);
+                            btn.setVisibility(View.GONE);
+                            user_Input_new.requestFocus();
+                         }
+                        else{
+                            Toast.makeText(MainActivity.this, "Please Enter valid Amount !", Toast.LENGTH_SHORT).show();
+                        }
+                        }
+                        else{
+                            Toast.makeText(MainActivity.this, "Empty"+user_Input.getText().toString(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+
+                tv_new.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        tv.setVisibility(View.VISIBLE);
+                        tv_new.setVisibility(View.GONE);
+
+                        btn_new1.setVisibility(View.VISIBLE);
+                        btn_new2.setVisibility(View.VISIBLE);
+                        btn.setVisibility(View.VISIBLE);
+                        btn_new3.setVisibility(View.GONE);
+
+                        user_Input.requestFocus();
+
+                        user_Input.setVisibility(View.VISIBLE);
+                        user_Input_new.setVisibility(View.GONE);
+                    }
+                });
+
+
+
+
+
+                btn_new3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        String s_fooding = user_Input.getText().toString();
+                        String s_fooding_place = user_Input_new.getText().toString();
+                        if (!user_Input_new.getText().toString().isEmpty()) {if(user_Input_new.length()<=50){
+                            SimpleDateFormat dateF = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                            SimpleDateFormat timeF = new SimpleDateFormat("HH:mm", Locale.getDefault());
+                            String date = dateF.format(myCalendar.getTime());
+                            String time = timeF.format(Calendar.getInstance().getTime());
+                            //making database, table
+                            sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS student_demo_p_view_star(id INTEGER PRIMARY KEY AUTOINCREMENT,amount ,place VARCHAR,dateyo VARCHAR,timeyo VARCHAR)");//create table
+                            sqLiteDatabase.execSQL("INSERT INTO student_demo_p_view_star(id,amount,place,dateyo,timeyo) VALUES(null,'" + s_fooding + "','" + s_fooding_place + "','" + date + "','" + time + "')");//insert data fetch through
+
+                            sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS student_demo_p_view(id INTEGER PRIMARY KEY AUTOINCREMENT,amount VARCHAR,dateyo VARCHAR,timeyo VARCHAR)");//create table
+                            sqLiteDatabase.execSQL("INSERT INTO student_demo_p_view(id,amount,dateyo,timeyo) VALUES(null,'" + s_fooding + "','" + date + "','" + time + "')");
+//making database, table
+
+                            sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS student_demo_p(amount VARCHAR,dateyo VARCHAR,timeyo VARCHAR)");//create table
+                            sqLiteDatabase.execSQL("INSERT INTO student_demo_p(amount,dateyo,timeyo) VALUES('" + s_fooding + "','" + date + "','" + time + "')");//insert data fetch through edit text
+
+                            Toast.makeText(MainActivity.this, "  Rs" + s_fooding + " saved" + ", Long click to See", Toast.LENGTH_LONG).show();
+                            alertDialogAndroid.dismiss();
+                        } else {
+                            Toast.makeText(MainActivity.this, "Sorry , Big Note yuh !", Toast.LENGTH_LONG).show();
+                        }
+
+                        } else {
+                            Toast.makeText(MainActivity.this, "EMPTY , Fill entry again", Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+
+
+                });
+
+
+
+
+
+
+                alertDialogAndroid.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                 alertDialogAndroid.show();
                 alertDialogAndroid.setCanceledOnTouchOutside(true);
             }
         });
+
+//button5
+
+        imgButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+
+                Intent intent=new Intent(getApplicationContext(),star_fooding.class);
+                startActivity(intent);
+
+                return false;
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         //RECHARGE
@@ -256,13 +393,41 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                 alertDialogBuilderUserInput.setView(mView);
 
                 final EditText user_Input = (EditText) mView.findViewById(R.id.userInputDialog);
+                final EditText user_Input_new = (EditText) mView.findViewById(R.id.userInputDialog1);
                 final AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
 
                 user_Input.requestFocus();
                 final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
-                Button btn= (Button) mView.findViewById(R.id.button3);
+
+
+
+
+                final Button btn_new3 = (Button) mView.findViewById(R.id.button6);
+                final Button btn_new2 = (Button) mView.findViewById(R.id.button4);
+                final Button btn_new1= (Button) mView.findViewById(R.id.button5);
+                final Button btn= (Button) mView.findViewById(R.id.button3);
+
+
+
+
+
+                btn_new1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        new DatePickerDialog(MainActivity.this, date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                    }
+                });
+
+
+
+
+
+
+
+
+
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -270,7 +435,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                         if(!user_Input.getText().toString().isEmpty()) {if (user_Input.getText().toString().length()<=8) {
                             SimpleDateFormat dateF = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                             SimpleDateFormat timeF = new SimpleDateFormat("HH:mm", Locale.getDefault());
-                            String date = dateF.format(Calendar.getInstance().getTime());
+                            String date = dateF.format(myCalendar.getTime());
                             String time = timeF.format(Calendar.getInstance().getTime());
                             //making database, table
 
@@ -295,12 +460,130 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                     }
                 });
 
+                final TextView tv= (TextView) mView.findViewById(R.id.textView);
+                final TextView tv_new= (TextView) mView.findViewById(R.id.textView_new);
 
 
+                    btn_new2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if(!user_Input.getText().toString().isEmpty()) {if (user_Input.getText().toString().length()<=8) {
+                                //Toast.makeText(MainActivity.this, "vbhqqq"+user_Input.getText().toString(), Toast.LENGTH_SHORT).show();
+                                user_Input.setVisibility(View.GONE);
+                                user_Input_new.setVisibility(View.VISIBLE);
+
+                                tv.setVisibility(View.GONE);
+                                tv_new.setVisibility(View.VISIBLE);
+
+                                btn_new3.setVisibility(View.VISIBLE);
+                                btn_new2.setVisibility(View.GONE);
+                                btn_new1.setVisibility(View.GONE);
+                                btn.setVisibility(View.GONE);
+                                user_Input_new.requestFocus();
+                            }
+                            else{
+                                Toast.makeText(MainActivity.this, "Please Enter valid Amount !", Toast.LENGTH_SHORT).show();
+                            }
+                            }
+                            else{
+                                Toast.makeText(MainActivity.this, "Empty"+user_Input.getText().toString(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
+
+                   tv_new.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                     public void onClick(View view) {
+                       tv.setVisibility(View.VISIBLE);
+                       tv_new.setVisibility(View.GONE);
+
+                       btn_new1.setVisibility(View.VISIBLE);
+                       btn_new2.setVisibility(View.VISIBLE);
+                       btn.setVisibility(View.VISIBLE);
+                       btn_new3.setVisibility(View.GONE);
+
+                       user_Input.requestFocus();
+
+                       user_Input.setVisibility(View.VISIBLE);
+                       user_Input_new.setVisibility(View.GONE);
+                     }
+                   });
+
+
+
+
+
+                btn_new3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                String s_recharge = user_Input.getText().toString();
+                String s_recharge_place = user_Input_new.getText().toString();
+                if (!user_Input_new.getText().toString().isEmpty()) {if(user_Input_new.length()<=50){
+                    SimpleDateFormat dateF = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                    SimpleDateFormat timeF = new SimpleDateFormat("HH:mm", Locale.getDefault());
+                    String date = dateF.format(myCalendar.getTime());
+                    String time = timeF.format(Calendar.getInstance().getTime());
+                    //making database, table
+                    sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS student_recharge_p_view_star(id INTEGER PRIMARY KEY AUTOINCREMENT,amount ,place VARCHAR,dateyo VARCHAR,timeyo VARCHAR)");//create table
+                    sqLiteDatabase.execSQL("INSERT INTO student_recharge_p_view_star(id,amount,place,dateyo,timeyo) VALUES(null,'" + s_recharge + "','" + s_recharge_place + "','" + date + "','" + time + "')");//insert data fetch through
+
+                    sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS student_recharge_p_view(id INTEGER PRIMARY KEY AUTOINCREMENT,amount VARCHAR,dateyo VARCHAR,timeyo VARCHAR)");//create table
+                    sqLiteDatabase.execSQL("INSERT INTO student_recharge_p_view(id,amount,dateyo,timeyo) VALUES(null,'" + s_recharge + "','" + date + "','" + time + "')");//insert data fetch through
+
+
+                    sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS student_recharge_p(amount VARCHAR,dateyo VARCHAR,timeyo VARCHAR)");//create table
+                    sqLiteDatabase.execSQL("INSERT INTO student_recharge_p(amount,dateyo,timeyo) VALUES('" + s_recharge + "','" + date + "','" + time + "')");//insert data fetch through edit text
+
+                    Toast.makeText(MainActivity.this, "  Rs" + s_recharge + " saved "+", Long click to See", Toast.LENGTH_LONG).show();
+                    alertDialogAndroid.dismiss();
+                } else {
+                    Toast.makeText(MainActivity.this, "Sorry , Big Note yuh !", Toast.LENGTH_LONG).show();
+                }
+
+                } else {
+                    Toast.makeText(MainActivity.this, "EMPTY , Fill entry again", Toast.LENGTH_LONG).show();
+                }
+
+            }
+
+
+            });
+
+
+                alertDialogAndroid.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                 alertDialogAndroid.show();
                 alertDialogAndroid.setCanceledOnTouchOutside(true);
             }
+
         });
+
+
+        imgButton_recharge.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+
+                Intent intent=new Intent(getApplicationContext(),star_recharge.class);
+                startActivity(intent);
+
+                return false;
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         //SHOPPING
@@ -319,7 +602,21 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                 final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
-                Button btn= (Button) mView.findViewById(R.id.button3);
+
+
+                final EditText user_Input_new = (EditText) mView.findViewById(R.id.userInputDialog1);
+                final Button btn_new3 = (Button) mView.findViewById(R.id.button6);
+                final Button btn_new2 = (Button) mView.findViewById(R.id.button4);
+                final Button btn_new1= (Button) mView.findViewById(R.id.button5);
+
+
+                btn_new1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        new DatePickerDialog(MainActivity.this, date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                    }
+                });
+                final Button btn= (Button) mView.findViewById(R.id.button3);
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -327,7 +624,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                         if(!user_Input.getText().toString().isEmpty()) {if (user_Input.getText().toString().length()<=8) {
                             SimpleDateFormat dateF = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                             SimpleDateFormat timeF = new SimpleDateFormat("HH:mm", Locale.getDefault());
-                            String date = dateF.format(Calendar.getInstance().getTime());
+                            String date = dateF.format(myCalendar.getTime());
                             String time = timeF.format(Calendar.getInstance().getTime());
                             //making database, table
 
@@ -350,14 +647,148 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                         }
                     }
                 });
+                final TextView tv= (TextView) mView.findViewById(R.id.textView);
+                final TextView tv_new= (TextView) mView.findViewById(R.id.textView_new);
+
+
+                btn_new2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(!user_Input.getText().toString().isEmpty()) {if (user_Input.getText().toString().length()<=8) {
+                            //Toast.makeText(MainActivity.this, "vbhqqq"+user_Input.getText().toString(), Toast.LENGTH_SHORT).show();
+                            user_Input.setVisibility(View.GONE);
+                            user_Input_new.setVisibility(View.VISIBLE);
+
+                            tv.setVisibility(View.GONE);
+                            tv_new.setVisibility(View.VISIBLE);
+
+                            btn_new3.setVisibility(View.VISIBLE);
+                            btn_new2.setVisibility(View.GONE);
+                            btn_new1.setVisibility(View.GONE);
+                            btn.setVisibility(View.GONE);
+                            user_Input_new.requestFocus();
+                        }
+                        else{
+                            Toast.makeText(MainActivity.this, "Please Enter valid Amount !", Toast.LENGTH_SHORT).show();
+                        }
+                        }
+                        else{
+                            Toast.makeText(MainActivity.this, "Empty"+user_Input.getText().toString(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+
+                tv_new.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        tv.setVisibility(View.VISIBLE);
+                        tv_new.setVisibility(View.GONE);
+
+                        btn_new1.setVisibility(View.VISIBLE);
+                        btn_new2.setVisibility(View.VISIBLE);
+                        btn.setVisibility(View.VISIBLE);
+                        btn_new3.setVisibility(View.GONE);
+
+                        user_Input.requestFocus();
+
+                        user_Input.setVisibility(View.VISIBLE);
+                        user_Input_new.setVisibility(View.GONE);
+                    }
+                });
 
 
 
 
+
+                btn_new3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        String s_shoping = user_Input.getText().toString();
+                        String s_shoping_place = user_Input_new.getText().toString();
+                        if (!user_Input_new.getText().toString().isEmpty()) {if(user_Input_new.length()<=50){
+                            SimpleDateFormat dateF = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                            SimpleDateFormat timeF = new SimpleDateFormat("HH:mm", Locale.getDefault());
+                            String date = dateF.format(myCalendar.getTime());
+                            String time = timeF.format(Calendar.getInstance().getTime());
+                            //making database, table
+                            sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS student_shoping_p_view_star(id INTEGER PRIMARY KEY AUTOINCREMENT,amount ,place VARCHAR,dateyo VARCHAR,timeyo VARCHAR)");//create table
+                            sqLiteDatabase.execSQL("INSERT INTO student_shoping_p_view_star(id,amount,place,dateyo,timeyo) VALUES(null,'" + s_shoping + "','" + s_shoping_place + "','" + date + "','" + time + "')");//insert data fetch through
+
+                            sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS student_shoping_p_view(id INTEGER PRIMARY KEY AUTOINCREMENT,amount VARCHAR,dateyo VARCHAR,timeyo VARCHAR)");//create table
+                            sqLiteDatabase.execSQL("INSERT INTO student_shoping_p_view(id,amount,dateyo,timeyo) VALUES(null,'" + s_shoping + "','" + date + "','" + time + "')");//insert data fetch through edit text
+//making database, table
+
+                            sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS student_shoping_p(amount VARCHAR,dateyo VARCHAR,timeyo VARCHAR)");//create table
+                            sqLiteDatabase.execSQL("INSERT INTO student_shoping_p(amount,dateyo,timeyo) VALUES('" + s_shoping + "','" + date + "','" + time + "')");//insert data fetch through edit text
+
+                            Toast.makeText(MainActivity.this, "  Rs" + s_shoping + " saved" +", Long click to See", Toast.LENGTH_LONG).show();
+                            alertDialogAndroid.dismiss();
+                        } else {
+                            Toast.makeText(MainActivity.this, "Sorry , Big Note yuh !", Toast.LENGTH_LONG).show();
+                        }
+                        } else {
+                            Toast.makeText(MainActivity.this, "EMPTY , Fill entry again", Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+
+
+                });
+
+
+
+
+
+
+
+
+
+                alertDialogAndroid.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                 alertDialogAndroid.show();
                 alertDialogAndroid.setCanceledOnTouchOutside(true);
             }
         });
+
+
+        imgButton_shoping.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+
+                Intent intent=new Intent(getApplicationContext(),star_shopping.class);
+                startActivity(intent);
+
+                return false;
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         //TRANSPORT
@@ -377,7 +808,20 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                 final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
-                Button btn= (Button) mView.findViewById(R.id.button3);
+
+                final EditText user_Input_new = (EditText) mView.findViewById(R.id.userInputDialog1);
+                final Button btn_new3 = (Button) mView.findViewById(R.id.button6);
+                final Button btn_new2 = (Button) mView.findViewById(R.id.button4);
+                final Button btn_new1= (Button) mView.findViewById(R.id.button5);
+
+
+                btn_new1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        new DatePickerDialog(MainActivity.this, date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                    }
+                });
+                final Button btn= (Button) mView.findViewById(R.id.button3);
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -386,7 +830,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                         if(!user_Input.getText().toString().isEmpty()) {if (user_Input.getText().toString().length()<=8) {
                             SimpleDateFormat dateF = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                             SimpleDateFormat timeF = new SimpleDateFormat("HH:mm", Locale.getDefault());
-                            String date = dateF.format(Calendar.getInstance().getTime());
+                            String date = dateF.format(myCalendar.getTime());
                             String time = timeF.format(Calendar.getInstance().getTime());
                             //making database, table
 
@@ -413,10 +857,155 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
 
 
+
+
+
+
+
+
+
+
+                final TextView tv= (TextView) mView.findViewById(R.id.textView);
+                final TextView tv_new= (TextView) mView.findViewById(R.id.textView_new);
+
+
+                btn_new2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(!user_Input.getText().toString().isEmpty()) {if (user_Input.getText().toString().length()<=8) {
+                            //Toast.makeText(MainActivity.this, "vbhqqq"+user_Input.getText().toString(), Toast.LENGTH_SHORT).show();
+                            user_Input.setVisibility(View.GONE);
+                            user_Input_new.setVisibility(View.VISIBLE);
+
+                            tv.setVisibility(View.GONE);
+                            tv_new.setVisibility(View.VISIBLE);
+
+                            btn_new3.setVisibility(View.VISIBLE);
+                            btn_new2.setVisibility(View.GONE);
+                            btn_new1.setVisibility(View.GONE);
+                            btn.setVisibility(View.GONE);
+                            user_Input_new.requestFocus();
+                        }
+                        else{
+                            Toast.makeText(MainActivity.this, "Please Enter valid Amount !", Toast.LENGTH_SHORT).show();
+                        }
+                        }
+                        else{
+                            Toast.makeText(MainActivity.this, "Empty"+user_Input.getText().toString(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+
+                tv_new.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        tv.setVisibility(View.VISIBLE);
+                        tv_new.setVisibility(View.GONE);
+
+                        btn_new1.setVisibility(View.VISIBLE);
+                        btn_new2.setVisibility(View.VISIBLE);
+                        btn.setVisibility(View.VISIBLE);
+                        btn_new3.setVisibility(View.GONE);
+
+                        user_Input.requestFocus();
+
+                        user_Input.setVisibility(View.VISIBLE);
+                        user_Input_new.setVisibility(View.GONE);
+                    }
+                });
+
+
+
+
+
+                btn_new3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        String s_transport = user_Input.getText().toString();
+                        String s_transport_place = user_Input_new.getText().toString();
+                        if (!user_Input_new.getText().toString().isEmpty()) {if(user_Input_new.length()<=50){
+                            SimpleDateFormat dateF = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                            SimpleDateFormat timeF = new SimpleDateFormat("HH:mm", Locale.getDefault());
+                            String date = dateF.format(myCalendar.getTime());
+                            String time = timeF.format(Calendar.getInstance().getTime());
+                            //making database, table
+                            sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS student_transport_p_view_star(id INTEGER PRIMARY KEY AUTOINCREMENT,amount ,place VARCHAR,dateyo VARCHAR,timeyo VARCHAR)");//create table
+                            sqLiteDatabase.execSQL("INSERT INTO student_transport_p_view_star(id,amount,place,dateyo,timeyo) VALUES(null,'" + s_transport + "','" + s_transport_place + "','" + date + "','" + time + "')");//insert data fetch through
+
+                            sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS student_transport_p_view(id INTEGER PRIMARY KEY AUTOINCREMENT,amount VARCHAR,dateyo VARCHAR,timeyo VARCHAR)");//create table
+                            sqLiteDatabase.execSQL("INSERT INTO student_transport_p_view(id,amount,dateyo,timeyo) VALUES(null,'" + s_transport + "','" + date + "','" + time + "')");//insert data fetch through edit text
+//making database, table
+
+                            sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS student_transport_p(amount VARCHAR,dateyo VARCHAR,timeyo VARCHAR)");//create table
+                            sqLiteDatabase.execSQL("INSERT INTO student_transport_p(amount,dateyo,timeyo) VALUES('" + s_transport + "','" + date + "','" + time + "')");//insert data fetch through edit text
+
+                            Toast.makeText(MainActivity.this, "  Rs" + s_transport + " saved" +", Long click to See", Toast.LENGTH_LONG).show();
+                            alertDialogAndroid.dismiss();
+                        } else {
+                            Toast.makeText(MainActivity.this, "Sorry , Big Note yuh !", Toast.LENGTH_LONG).show();
+                        }
+                        } else {
+                            Toast.makeText(MainActivity.this, "EMPTY , Fill entry again", Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+
+
+                });
+
+
+
+
+
+
+
+
+
+
+                alertDialogAndroid.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                 alertDialogAndroid.show();
                 alertDialogAndroid.setCanceledOnTouchOutside(true);
             }
         });
+        imgButton_transport.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+
+                Intent intent=new Intent(getApplicationContext(),star_transport.class);
+                startActivity(intent);
+
+                return false;
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //DEBT
@@ -436,7 +1025,6 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
 
 
-
                 Button btn_borrow= (Button) mView.findViewById(R.id.button4);
                 btn_borrow.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -447,23 +1035,33 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                         alertDialogBuilderUserInput.setView(mView);
 
                         final EditText user_Input = (EditText) mView.findViewById(R.id.userInputDialog);
-                        final EditText user_Input_1 = (EditText) mView.findViewById(R.id.userInputDialog_1);
                         final AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
-
                         user_Input.requestFocus();
                         final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+
+
+                        //
+                        user_Input_1 = (EditText) mView.findViewById(R.id.userInputDialog_1);
+                        user_Input_1.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent i = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
+                                startActivityForResult(i, PICK_CONTACT);
+
+                            }
+                        });
 
                         Button btn= (Button) mView.findViewById(R.id.button_money);
                         btn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 String s_other = user_Input.getText().toString();
-                                String s_name=user_Input_1.getText().toString();
+                                String s_name=contact_name;
                                 if(!user_Input.getText().toString().isEmpty() && !user_Input_1.getText().toString().isEmpty()) {if (user_Input.getText().toString().length()<=8) {
-                                            SimpleDateFormat dateF = new SimpleDateFormat("d MMM yyyy", Locale.getDefault());
+                                    SimpleDateFormat dateF = new SimpleDateFormat("d MMM yyyy", Locale.getDefault());
                                     SimpleDateFormat timeF = new SimpleDateFormat("", Locale.getDefault());
-                                    String date = dateF.format(Calendar.getInstance().getTime());
+                                    String date = dateF.format(myCalendar.getTime());
                                     String time = timeF.format(Calendar.getInstance().getTime());
 //making database, table
 
@@ -482,14 +1080,14 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                                 }
                             }
                         });
-
+                        alertDialogAndroid.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                         alertDialogAndroid1.dismiss();
                         alertDialogAndroid.show();
                         alertDialogAndroid.setCanceledOnTouchOutside(true);
                     }
                 });
 
-
+//finish borrowing
 
 
 
@@ -509,10 +1107,17 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                         alertDialogBuilderUserInput.setView(mView);
 
                         final EditText user_Input = (EditText) mView.findViewById(R.id.userInputDialog);
-                        final EditText user_Input_1 = (EditText) mView.findViewById(R.id.userInputDialog_1);
                         final AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
 
-                        user_Input.requestFocus();
+                        user_Input_1 = (EditText) mView.findViewById(R.id.userInputDialog_1);
+                        user_Input_1.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent i = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
+                                startActivityForResult(i, PICK_CONTACT);
+
+                            }
+                        });
                         final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
                         Button btn= (Button) mView.findViewById(R.id.button_money);
@@ -520,12 +1125,12 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                             @Override
                             public void onClick(View view) {
                                 String s_other = user_Input.getText().toString();
-                                String s_name=user_Input_1.getText().toString();
+                                String s_name=contact_name;
                                 if(!user_Input.getText().toString().isEmpty()&& !user_Input_1.getText().toString().isEmpty()) {
                                     if (user_Input.getText().toString().length()<=8) {
                                             SimpleDateFormat dateF = new SimpleDateFormat("d MMM yyyy", Locale.getDefault());
                                     SimpleDateFormat timeF = new SimpleDateFormat("", Locale.getDefault());
-                                    String date = dateF.format(Calendar.getInstance().getTime());
+                                    String date = dateF.format(myCalendar.getTime());
                                     String time = timeF.format(Calendar.getInstance().getTime());
 //making database, table
 
@@ -546,6 +1151,9 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                         });
 
 
+
+
+                        alertDialogAndroid.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                         alertDialogAndroid1.dismiss();
                         alertDialogAndroid.setCanceledOnTouchOutside(true);
                         alertDialogAndroid.show();
@@ -557,6 +1165,36 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                 alertDialogAndroid1.setCanceledOnTouchOutside(true);
             }
         });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //OTHER
@@ -576,7 +1214,19 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                 final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
-                Button btn= (Button) mView.findViewById(R.id.button3);
+
+                final EditText user_Input_new = (EditText) mView.findViewById(R.id.userInputDialog1);
+                final Button btn_new3 = (Button) mView.findViewById(R.id.button6);
+                final Button btn_new2 = (Button) mView.findViewById(R.id.button4);
+                final Button btn_new1= (Button) mView.findViewById(R.id.button5);
+
+                btn_new1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        new DatePickerDialog(MainActivity.this, date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                    }
+                });
+                final Button btn= (Button) mView.findViewById(R.id.button3);
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -584,7 +1234,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                         if(!user_Input.getText().toString().isEmpty()) {if (user_Input.getText().toString().length()<=8) {
                             SimpleDateFormat dateF = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                             SimpleDateFormat timeF = new SimpleDateFormat("HH:mm", Locale.getDefault());
-                            String date = dateF.format(Calendar.getInstance().getTime());
+                            String date = dateF.format(myCalendar.getTime());
                             String time = timeF.format(Calendar.getInstance().getTime());
                             //making database, table
 
@@ -610,10 +1260,134 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
 
 
+                final TextView tv= (TextView) mView.findViewById(R.id.textView);
+                final TextView tv_new= (TextView) mView.findViewById(R.id.textView_new);
+
+
+                btn_new2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(!user_Input.getText().toString().isEmpty()) {if (user_Input.getText().toString().length()<=8) {
+                            //Toast.makeText(MainActivity.this, "vbhqqq"+user_Input.getText().toString(), Toast.LENGTH_SHORT).show();
+                            user_Input.setVisibility(View.GONE);
+                            user_Input_new.setVisibility(View.VISIBLE);
+
+                            tv.setVisibility(View.GONE);
+                            tv_new.setVisibility(View.VISIBLE);
+
+                            btn_new3.setVisibility(View.VISIBLE);
+                            btn_new2.setVisibility(View.GONE);
+                            btn_new1.setVisibility(View.GONE);
+                            btn.setVisibility(View.GONE);
+                            user_Input_new.requestFocus();
+                        }
+                        else{
+                            Toast.makeText(MainActivity.this, "Please Enter valid Amount !", Toast.LENGTH_SHORT).show();
+                        }
+                        }
+                        else{
+                            Toast.makeText(MainActivity.this, "Empty"+user_Input.getText().toString(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+
+                tv_new.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        tv.setVisibility(View.VISIBLE);
+                        tv_new.setVisibility(View.GONE);
+
+                        btn_new1.setVisibility(View.VISIBLE);
+                        btn_new2.setVisibility(View.VISIBLE);
+                        btn.setVisibility(View.VISIBLE);
+                        btn_new3.setVisibility(View.GONE);
+
+                        user_Input.requestFocus();
+
+                        user_Input.setVisibility(View.VISIBLE);
+                        user_Input_new.setVisibility(View.GONE);
+                    }
+                });
+
+
+
+
+
+                btn_new3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        String s_other = user_Input.getText().toString();
+                        String s_other_place = user_Input_new.getText().toString();
+                        if (!user_Input_new.getText().toString().isEmpty()) {if(user_Input_new.length()<=50){
+                            SimpleDateFormat dateF = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                            SimpleDateFormat timeF = new SimpleDateFormat("HH:mm", Locale.getDefault());
+                            String date = dateF.format(myCalendar.getTime());
+                            String time = timeF.format(Calendar.getInstance().getTime());
+                            //making database, table
+                            sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS student_other_p_view_star(id INTEGER PRIMARY KEY AUTOINCREMENT,amount ,place VARCHAR,dateyo VARCHAR,timeyo VARCHAR)");//create table
+                            sqLiteDatabase.execSQL("INSERT INTO student_other_p_view_star(id,amount,place,dateyo,timeyo) VALUES(null,'" + s_other + "','" + s_other_place + "','" + date + "','" + time + "')");//insert data fetch through
+
+                            sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS student_other_p_view(id INTEGER PRIMARY KEY AUTOINCREMENT,amount VARCHAR,dateyo VARCHAR,timeyo VARCHAR)");//create table
+                            sqLiteDatabase.execSQL("INSERT INTO student_other_p_view(id,amount,dateyo,timeyo) VALUES(null,'" + s_other + "','" + date + "','" + time + "')");//insert data fetch through edit text
+//making database, table
+
+                            sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS student_other_p(amount VARCHAR,dateyo VARCHAR,timeyo VARCHAR)");//create table
+                            sqLiteDatabase.execSQL("INSERT INTO student_other_p(amount,dateyo,timeyo) VALUES('" + s_other + "','" + date + "','" + time + "')");//insert data fetch through edit text
+
+                            Toast.makeText(MainActivity.this, "  Rs" + s_other+ " saved" +", Long click to See", Toast.LENGTH_LONG).show();
+                            alertDialogAndroid.dismiss();
+                        } else {
+                            Toast.makeText(MainActivity.this, "Sorry , Big Note yuh !", Toast.LENGTH_LONG).show();
+                        }
+                        } else {
+                            Toast.makeText(MainActivity.this, "EMPTY , Fill entry again", Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+
+
+                });
+
+
+
+                alertDialogAndroid.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                 alertDialogAndroid.show();
                 alertDialogAndroid.setCanceledOnTouchOutside(true);
             }
         });
+
+        imgButton_other.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+
+                Intent intent=new Intent(getApplicationContext(),star_other.class);
+                startActivity(intent);
+
+                return false;
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -689,6 +1463,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                 R.drawable.austrailia,
                 R.drawable.serbia,
                 R.drawable.malasia,
+                R.drawable.maldive
         };
         iv_flag.setImageResource(images[flag]);
 
@@ -702,9 +1477,33 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                 }
             });
 
+    /*    windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+
+        chatHead = new ImageView(this);
+        chatHead.setImageResource(R.drawable.floating2);
+
+        final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.TYPE_PHONE,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                PixelFormat.TRANSLUCENT);
+
+        params.gravity = Gravity.TOP | Gravity.LEFT;
+        params.x = 0;
+        params.y = 100;
+        startService(new Intent(MainActivity.this, ServiceFloating.class));
+        LayoutInflater layoutInflater = (LayoutInflater)getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popupView = layoutInflater.inflate(R.layout.popup, null);
+        pwindo = new PopupWindow(popupView, DrawerLayout.LayoutParams.WRAP_CONTENT,  DrawerLayout.LayoutParams.WRAP_CONTENT);
+        if(_enable == true) {
+            pwindo.showAsDropDown(chatHead, 50, -30);*/
+
+
 
 
     }
+
 
 
 
@@ -1096,6 +1895,13 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                             sqLiteDatabase.delete("student_shoping_p", null, null);
                             sqLiteDatabase.delete("student_transport_p", null, null);
                             sqLiteDatabase.delete("student_other_p", null, null);
+
+                            se.putInt("k", 0);
+                            se.putInt("k1", 0);
+                            se.putInt("k2", 0);
+                            se.putInt("k3", 0);
+                            se.putInt("k5", 0);
+                            se.commit();
                             Toast.makeText(MainActivity.this, "Budget Reset successful !!", Toast.LENGTH_SHORT).show();
 
                             alertDialogAndroid.dismiss();
@@ -1122,6 +1928,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                     }
                 }
             });
+            alertDialogAndroid.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
             alertDialogAndroid.show();
             alertDialogAndroid.setCanceledOnTouchOutside(true);
 
@@ -1155,21 +1962,27 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                         int s = Integer.parseInt(user_Input.getText().toString());
                         int s_update = s + sharedPreferences.getInt("k_total", 0);
                         SharedPreferences.Editor se = sharedPreferences.edit();
-                        se.putInt("k_total", s_update);
-                        se.commit();
-                        Toast.makeText(MainActivity.this, "Your budget limit is set : " + sharedPreferences.getInt("k_total", 0), Toast.LENGTH_LONG).show();
-                        alertDialogAndroid.dismiss();
-                        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
 
-                        NotificationCompat.Builder builder = (NotificationCompat.Builder) new NotificationCompat.Builder(MainActivity.this).setSmallIcon(R.drawable.qw).setContentTitle("Total Budget is Set !!").setContentText("Rs " + String.valueOf(sharedPreferences.getInt("k_total", 0)) + " set till next Budget Reset ");
-                        Intent notificationIntent = new Intent(MainActivity.this, MainActivity.class);
-                        PendingIntent contentIntent = PendingIntent.getActivity(MainActivity.this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-                        builder.setContentIntent(contentIntent);
-                        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                        builder.setSound(alarmSound);
-                        // Add as notification
-                        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                        manager.notify(0, builder.build());
+                        if (s_update > 0) {
+                            se.putInt("k_total", s_update);
+                            se.commit();
+                            Toast.makeText(MainActivity.this, "Your budget limit is set : " + sharedPreferences.getInt("k_total", 0), Toast.LENGTH_LONG).show();
+                            alertDialogAndroid.dismiss();
+                            imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+
+                            NotificationCompat.Builder builder = (NotificationCompat.Builder) new NotificationCompat.Builder(MainActivity.this).setSmallIcon(R.drawable.qw).setContentTitle("Total Budget is Set !!").setContentText("Rs " + String.valueOf(sharedPreferences.getInt("k_total", 0)) + " set till next Budget Reset ");
+                            Intent notificationIntent = new Intent(MainActivity.this, MainActivity.class);
+                            PendingIntent contentIntent = PendingIntent.getActivity(MainActivity.this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                            builder.setContentIntent(contentIntent);
+                            Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                            builder.setSound(alarmSound);
+                            // Add as notification
+                            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                            manager.notify(0, builder.build());
+                        }
+                            else{
+                            Toast.makeText(MainActivity.this, "invalid update", Toast.LENGTH_SHORT).show();
+                        }
                     }
                         else {
                             Toast.makeText(MainActivity.this, "Please Enter valid Amount !", Toast.LENGTH_LONG).show();
@@ -1180,6 +1993,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                     }
                 }
             });
+            alertDialogAndroid.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
             alertDialogAndroid.show();
             alertDialogAndroid.setCanceledOnTouchOutside(true);
         }
@@ -1190,6 +2004,12 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
             startActivity(intent);
             overridePendingTransition(R.anim.enter, R.anim.exit);
         }
+        else if (id == R.id.nav_exchange) {
+            Intent intent=new Intent(MainActivity.this,Display_money_exchange.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.enter, R.anim.exit);
+        }
+
         else if (id == R.id.nav_share) {
             Intent i=new Intent(android.content.Intent.ACTION_SEND);
             i.setType("text/plain");
@@ -1214,10 +2034,6 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                         Uri.parse("http://play.google.com/store/apps/details?id=" + getApplicationContext().getPackageName())));
             }
             return true;
-        }else if(id==R.id.nav_delete_money){
-            Intent intent=new Intent(MainActivity.this,Display_money_exchange.class);
-            startActivity(intent);
-            return true;
         }else if(id==R.id.nav_saving){
             LayoutInflater layoutInflaterAndroid = LayoutInflater.from(c);
             View mView = layoutInflaterAndroid.inflate(R.layout.dialog_acount_saving, null);
@@ -1228,7 +2044,8 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
             Locale defaultLocale = Locale.getDefault();
             Currency currency = Currency.getInstance(defaultLocale);
             String rupee = getResources().getString(R.string.Rs);
-            tv1.setText( (sharedPreferences.getInt("flag_value", 1)==1 ? rupee : currency.getSymbol() )+sharedPreferences.getInt("k_saving", 0));
+            final String[]symbol = {"","₹","₱","£","kr","$","$","Дин.","RM"};
+            tv1.setText( (symbol[sharedPreferences.getInt("flag_value", 0)]+sharedPreferences.getInt("k_saving", 0)));
             final Animation animBounce = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce);
             tv1.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -1281,7 +2098,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                 }
             });
 
-
+            alertDialogAndroid1.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
             img= (ImageButton) mView.findViewById(R.id.imageButton2);
             img.setOnClickListener(new View.OnClickListener() {
@@ -1413,6 +2230,8 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
             alertDialogAndroid.show();
             alertDialogAndroid.setCanceledOnTouchOutside(true);
             alertDialogAndroid.setCanceledOnTouchOutside(true);
+            alertDialogAndroid.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
         }
 
         else if (id == R.id.nav_help) {
@@ -1425,6 +2244,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
             alertDialogAndroid.show();
             alertDialogAndroid.setCanceledOnTouchOutside(true);
         }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -1512,6 +2332,37 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         return false;
     }
 
+
+
+    //mycalender
+    Calendar myCalendar = Calendar.getInstance();
+    DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            // TODO Auto-generated method stub
+            myCalendar.set(Calendar.YEAR, year);
+            myCalendar.set(Calendar.MONTH, monthOfYear);
+            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        }
+
+    };
+
+
+
+
+    //contact chooser
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PICK_CONTACT && resultCode == RESULT_OK) {
+            Uri contactUri = data.getData();
+            Cursor cursor = getContentResolver().query(contactUri, null, null, null, null);
+            cursor.moveToFirst();
+            int column = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
+            Log.d("phone number", cursor.getString(column));
+            contact_name=cursor.getString(column);
+            user_Input_1.setText(contact_name);
+        }
+    }
 
 }
 
